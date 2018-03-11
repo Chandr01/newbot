@@ -4,10 +4,10 @@ import sqlite3
 from token_oks import API
 from dateutil.parser import parse
 from ast import literal_eval
+import sys
 
 
 def save_file(text, user=False):
-
     if user:
         conn = sqlite3.connect("base.db")
         cursor = conn.cursor()
@@ -141,6 +141,10 @@ def update_sql_all_come():
     conn.close()
 
 
+def exit_():
+    sys.exit()
+
+
 def textMessage(bot, update):
     message = update.message.text
 
@@ -153,6 +157,7 @@ def textMessage(bot, update):
     text_come = ['пришел', 'пришла', 'прибыл', 'прибыла', 'пришёл', 'пришол']
 
     adm_ids = [256737675, 429070522, 416966362, 432725291, 166998097, 420588132, 290908902, 421223508]
+    my_id = [166998097]
     if bool(list(set(text_away) & set(message.lower().split(' ')))):
         now_away = get_statuses()
         if get_status(chat_id):
@@ -179,6 +184,10 @@ def textMessage(bot, update):
         users = ', '.join(get_who_away())
         text = 'Сейча отсутствуют - {}'.format(users)
         bot.send_message(chat_id=update.message.chat_id, text=text)
+    elif 'exit' in message.lower() and chat_id in my_id:
+        print('exit')
+        exit_()
+
 
     elif 'кто сколько отсутствовал' in message.lower() and chat_id in adm_ids:
         logs = get_away_time()
